@@ -156,6 +156,37 @@ export function pointAlong(coords, meters) {
   return null;
 }
 
+// MARK: - What kind of route (mirrors RunDistance and RouteGuide.outAndBackTurnaround)
+
+const GOALS = [
+  { meters: 5000, short: "5K", name: "5K" },
+  { meters: 10000, short: "10K", name: "10K" },
+  { meters: 21097.5, short: "Half", name: "half marathon" },
+  { meters: 42195, short: "Marathon", name: "marathon" },
+];
+
+/** The longest standard distance a route covers ({meters, short, name}), or null under 5K. */
+export function goalFor(meters) {
+  let goal = null;
+  // Share links round to the meter: a meter of slack.
+  for (const g of GOALS) if (meters + 1 >= g.meters) goal = g;
+  return goal;
+}
+
+/** True when the way back retraces the way out (an out-and-back), not a loop. */
+export function isOutAndBack(coords) {
+  if (coords.length < 3 || distance(coords[0], coords[coords.length - 1]) >= 60) return false;
+  const total = pathLength(coords);
+  if (total <= 300) return false;
+  for (let k = 1; k < 20; k++) {
+    const d = (total * k) / 40;
+    const a = pointAlong(coords, d);
+    const b = pointAlong(coords, total - d);
+    if (!a || !b || distance(a, b) >= 30) return false;
+  }
+  return true;
+}
+
 // MARK: - GPX (byte-for-byte the same as GPX.swift)
 
 function escapeXML(s) {

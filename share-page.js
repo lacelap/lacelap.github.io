@@ -1,10 +1,9 @@
 // /r — draws a shared Lacelap route from the URL fragment. The fragment never reaches a server.
 // Decoded text goes into the page with textContent only.
 
-import { decodeShareLink, gpxFilename, pathLength, pointAlong, toGPX } from "/r.js";
+import { decodeShareLink, goalFor, gpxFilename, isOutAndBack, pathLength, pointAlong, toGPX } from "/r.js";
 
 const COLORS = { spruceDeep: "#0b3330", cream: "#f6f1e4", coral: "#ff6b3d" };
-const FIVE_K = 5000;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const desktop = window.matchMedia("(min-width: 820px)");
 
@@ -98,13 +97,18 @@ function render(route) {
   document.body.classList.remove("is-error");
   document.body.classList.add("is-route");
 
-  const name = route.name.trim() || "A 5K loop";
-  $("route-name").textContent = name;
-  document.title = `${name} · Lacelap`;
-
   const length = pathLength(route.coordinates);
   // The sender's engine measured the full-detail route; the link carries a simplified one.
   const meters = route.distance > 0 ? route.distance : length;
+  const goal = goalFor(meters);
+  const outAndBack = isOutAndBack(route.coordinates);
+  const kind = outAndBack ? "out-and-back" : "loop";
+
+  const name = route.name.trim() || (goal ? `A ${goal.name} ${kind}` : `A ${kind}`);
+  $("route-name").textContent = name;
+  document.title = `${name} · Lacelap`;
+  $("eyebrow").textContent = `Someone wants you to run this ${kind}`;
+  $("shape-hint").textContent = outAndBack ? ", turning around at the far end" : "";
   $("km").textContent = formatNumber(meters / 1000);
   $("mi").textContent = formatNumber(meters / 1609.344);
 
@@ -123,23 +127,37 @@ function render(route) {
   }).addTo(map);
   layers.push(casing, line);
 
-  // The 5K point, scaled onto the simplified line so it lands where the sender's app put it.
-  let flagAt = null;
-  if (meters >= FIVE_K && length > 0) flagAt = pointAlong(route.coordinates, (FIVE_K * length) / meters);
+  // The far end of an out-and-back.
+  if (outAndBack) {
+    const turn = pointAlong(route.coordinates, length / 2);
+    if (turn) {
+      layers.push(L.circleMarker([turn.lat, turn.lon], {
+        radius: 7, color: COLORS.cream, weight: 3, fillColor: COLORS.spruceDeep, fillOpacity: 1, interactive: false,
+      }).addTo(map));
+    }
+  }
+
+  // The goal point (5K, 10K, half, marathon), scaled onto the simplified line so it lands where
+  // the sender's app put it. Not drawn when it's the finish itself: the start dot marks that.
+  const flagMeters = goal && length > 0 ? (goal.meters * length) / meters : Infinity;
+  const flagAt = length - flagMeters > 25 ? pointAlong(route.coordinates, flagMeters) : null;
   if (flagAt) {
     const flag = L.marker([flagAt.lat, flagAt.lon], {
       icon: L.divIcon({
         className: "flag-icon",
-        html: '<span class="flag"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M3 1h1.5v14H3zM5.5 2h8l-2 3.5 2 3.5h-8z"/></svg>5K</span>',
-        iconSize: [48, 22],
-        iconAnchor: [24, 26],
+        html: `<span class="flag"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M3 1h1.5v14H3zM5.5 2h8l-2 3.5 2 3.5h-8z"/></svg>${goal.short}</span>`,
+        // A fixed box with the label centered in it (site.css), so "Marathon" sits as true as "5K".
+        iconSize: [112, 22],
+        iconAnchor: [56, 26],
       }),
       keyboard: false,
       interactive: false,
-      title: "5 kilometers",
+      title: goal.name,
     }).addTo(map);
     layers.push(flag);
   }
+  // "The flag marks 10K." / "The flag marks the half marathon distance."
+  $("flag-goal").textContent = !goal ? "" : goal.meters < 20000 ? goal.short : `the ${goal.name} distance`;
   $("flag-hint").hidden = !flagAt;
 
   const start = route.coordinates[0];
@@ -167,7 +185,7 @@ function load() {
 
 $("gpx").addEventListener("click", () => {
   if (!current) return;
-  const name = current.name.trim() || "Lacelap 5K";
+  const name = current.name.trim() || "Lacelap run";
   const blob = new Blob([toGPX(name, current.coordinates)], { type: "application/gpx+xml" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

@@ -5,8 +5,8 @@
   <!-- GitHub Pages can't send headers, so the security policy lives here. -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>A 5K loop · Lacelap</title>
-  <meta name="description" content="Someone shared a running loop with you. See it on the map and download the GPX for your watch.">
+  <title>A running route · Lacelap</title>
+  <meta name="description" content="Someone shared a running route with you. See it on the map and download the GPX for your watch.">
   <meta name="theme-color" content="#0b3330">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <!-- When Lacelap is on the App Store, add its id to show Safari's "Open in app" banner:
@@ -14,8 +14,8 @@
   -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Lacelap">
-  <meta property="og:title" content="Run this 5K loop with me">
-  <meta property="og:description" content="A safe running loop, planned with Lacelap. Open it to see the route and grab the GPX.">
+  <meta property="og:title" content="Run this route with me">
+  <meta property="og:description" content="A safe running route, planned with Lacelap. Open it to see the route and grab the GPX.">
   <meta property="og:image" content="https://lacelap.github.io/apple-touch-icon.png">
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -37,13 +37,13 @@
       <a class="brand" href="/"><img src="/favicon.svg" alt="" width="28" height="28">Lacelap</a>
 
       <div class="route-only">
-        <p class="eyebrow">Someone wants you to run this loop</p>
-        <h1 id="route-name">A 5K loop</h1>
+        <p class="eyebrow" id="eyebrow">Someone wants you to run this loop</p>
+        <h1 id="route-name">A running route</h1>
         <p class="distance">
           <span class="km"><span id="km">5.00</span> <small>km</small></span>
           <span class="mi"><span id="mi">3.11</span> mi</span>
         </p>
-        <p class="hint">Start and finish at the <span class="dot-inline" aria-hidden="true"></span> coral dot.<span id="flag-hint"> The flag marks 5K.</span></p>
+        <p class="hint">Start and finish at the <span class="dot-inline" aria-hidden="true"></span> coral dot<span id="shape-hint"></span>.<span id="flag-hint"> The flag marks <span id="flag-goal">5K</span>.</span></p>
       </div>
       <div class="actions route-only">
         <button id="gpx" class="btn primary" type="button">

@@ -207,7 +207,7 @@ a { color: inherit; }
 
 .start-dot { filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.3)); }
 
-.flag-icon { background: none; border: 0; }
+.flag-icon { background: none; border: 0; display: flex; justify-content: center; }
 .flag {
   display: inline-flex;
   align-items: center;
