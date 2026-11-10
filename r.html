@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- GitHub Pages can't send headers, so the security policy lives here. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>A 5K loop · Lacelap</title>
+  <meta name="description" content="Someone shared a running loop with you. See it on the map and download the GPX for your watch.">
+  <meta name="theme-color" content="#0b3330">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <!-- When Lacelap is on the App Store, add its id to show Safari's "Open in app" banner:
+  <meta name="apple-itunes-app" content="app-id=APP_STORE_ID">
+  -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Lacelap">
+  <meta property="og:title" content="Run this 5K loop with me">
+  <meta property="og:description" content="A safe running loop, planned with Lacelap. Open it to see the route and grab the GPX.">
+  <meta property="og:image" content="https://lacelap.github.io/apple-touch-icon.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
+        integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="/site.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
+          integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH"
+          crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+  <script type="module" src="/share-page.js"></script>
+</head>
+<body>
+  <div class="share">
+    <div id="map" role="region" aria-label="Map of the shared route"></div>
+
+    <section class="sheet" aria-live="polite">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" width="28" height="28">Lacelap</a>
+
+      <div class="route-only">
+        <p class="eyebrow">Someone wants you to run this loop</p>
+        <h1 id="route-name">A 5K loop</h1>
+        <p class="distance">
+          <span class="km"><span id="km">5.00</span> <small>km</small></span>
+          <span class="mi"><span id="mi">3.11</span> mi</span>
+        </p>
+        <p class="hint">Start and finish at the <span class="dot-inline" aria-hidden="true"></span> coral dot.<span id="flag-hint"> The flag marks 5K.</span></p>
+      </div>
+      <div class="actions route-only">
+        <button id="gpx" class="btn primary" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
+          Download GPX
+        </button>
+        <a class="btn" href="/">Get Lacelap</a>
+      </div>
+      <p class="fine route-only">The GPX file works with Garmin, Coros, Suunto, Strava and most running watches.</p>
+
+      <div class="error-only">
+        <svg class="error-loop" viewBox="0 0 1024 1024" aria-hidden="true">
+          <path pathLength="1" d="M260 700 L260 520 Q260 480 300 480 L430 480 Q470 480 470 440 L470 290 Q470 250 510 250 L624 250 Q648 250 666 268 L772 374 Q790 392 790 418 L790 560 C790 700 640 790 520 750 C420 718 340 776 290 744" fill="none" stroke="#ff6b3d" stroke-width="70" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0.06 0.06"/>
+        </svg>
+        <h1 id="error-title">This route didn't make it</h1>
+        <p id="error-body">The link looks cut off or garbled.</p>
+      </div>
+      <div class="actions error-only">
+        <a class="btn primary" href="/">Get Lacelap</a>
+      </div>
+
+      <noscript><p>This page needs JavaScript to draw the route. The route itself is stored in the link after the <code>#</code>, so nothing about it is sent to our server.</p></noscript>
+    </section>
+  </div>
+</body>
+</html>

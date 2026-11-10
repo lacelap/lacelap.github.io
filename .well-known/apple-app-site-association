@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["6P82J7CK97.app.lacelap.ios"],
+        "components": [
+          { "/": "/r", "comment": "Shared route: https://lacelap.github.io/r#<payload>" },
+          { "/": "/r/*", "comment": "Shared route with a trailing path" }
+        ]
+      }
+    ]
+  }
+}
